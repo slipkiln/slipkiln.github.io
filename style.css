@@ -19,7 +19,7 @@ nav a.navcta{background:var(--acc);color:#111;padding:6px 12px;border-radius:6px
 .form{max-width:560px}.form label{display:block;margin:14px 0 6px;color:var(--mute)}
 .form input[type=email],.form input[type=text],.form input[type=password]{width:100%;padding:11px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--fg);font-size:16px}
 .form button,.plans button{cursor:pointer;border:0;font-size:15px}.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-.keybox{display:flex;gap:8px;margin:10px 0}.keybox code{flex:1;background:var(--panel);border:1px solid var(--acc);border-radius:8px;padding:11px;font:14px ui-monospace,monospace;word-break:break-all}
+.keybox{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.keybox code{flex:1;background:var(--panel);border:1px solid var(--acc);border-radius:8px;padding:11px;font:14px ui-monospace,monospace;word-break:break-all}
 .msg{margin-top:14px;padding:10px 14px;border-radius:8px;display:none}.msg.err{display:block;background:#3d1214;border:1px solid #f85149;color:#ffa198}.msg.ok{display:block;background:#0f2a1a;border:1px solid #3fb950;color:#7ee787}
 .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}.plans button{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:left}
 .plans button:hover,.plans button.sel{border-color:var(--acc)}.plans b{display:block;font-size:18px}
