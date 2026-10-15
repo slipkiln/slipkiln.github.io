@@ -1,10 +1,10 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SlipKiln: JSON & HTML to branded PDF API</title><meta name="description" content="SlipKiln: a simple, usage-billed API that turns JSON or HTML into branded PDF invoices, receipts and certificates.">
-<link rel="stylesheet" href="style.css"></head><body>
-<header><div class="wrap"><a class="logo" href="index.html">Slip<span>Kiln</span></a><nav><a href="index.html#how">How it works</a><a href="pricing.html">Pricing</a><a href="mailto:support@slipkiln.com?subject=SlipKiln%20early%20access">Early access</a></nav></div></header>
+<link rel="stylesheet" href="/style.css"></head><body>
+<header><div class="wrap"><a class="logo" href="/">Slip<span>Kiln</span></a><nav><a href="/#how">How it works</a><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a class="navcta" href="/signup.html">Get API key</a></nav></div></header>
 <main class="wrap">
-<div class="hero"><h1>Branded PDFs from one API call.</h1><p>Send JSON or HTML, get back a pixel-perfect invoice, receipt or certificate with your logo and colors. Pay only for what you render.</p>
-<a class="btn" href="mailto:support@slipkiln.com?subject=SlipKiln%20early%20access">Join early access</a><a class="btn ghost" href="pricing.html">See pricing</a></div>
+<div id="subscribed" class="msg ok hidden" style="max-width:640px;margin:24px auto 0;text-align:center">Thanks for subscribing! Your plan is now active on your API key.</div><div class="hero"><h1>Branded PDFs from one API call.</h1><p>Send JSON or HTML, get back a pixel-perfect invoice, receipt or certificate with your logo and colors. Pay only for what you render.</p>
+<a class="btn" href="/signup.html">Get your free API key</a><a class="btn ghost" href="pricing.html">See pricing</a></div>
 <section id="how"><h2>How it works</h2><div class="grid">
 <div class="card step"><b>01</b><h3>Get an API key</h3><p>Sign up, add your logo and brand colors once.</p></div>
 <div class="card step"><b>02</b><h3>POST your data</h3><p>Send JSON to a ready-made template, or your own HTML/CSS.</p></div>
@@ -23,19 +23,19 @@
   }'</span> \
   -o invoice.pdf
 <span class="c"># → invoice.pdf, branded with your logo and colors</span></pre>
-<p style="color:var(--mute)">Preview only: the API is in early access and the endpoint shown is illustrative.</p></section>
+<p style="color:var(--mute)">50 free documents every month. No card required. <a href="/docs/">Read the docs</a>.</p></section>
 <section><h2>Features</h2><div class="grid">
 <div class="card"><h3>JSON templates</h3><p>Invoices, receipts and certificates out of the box. No layout code.</p></div>
 <div class="card"><h3>Bring your HTML</h3><p>Full modern CSS rendered by a headless browser engine.</p></div>
 <div class="card"><h3>Your brand</h3><p>Logo, colors and fonts applied to every document.</p></div>
 <div class="card"><h3>Usage billing</h3><p>Generous free tier, simple plans, fair per-document overage.</p></div>
-<div class="card"><h3>Async &amp; webhooks</h3><p>Queue big batches and get notified when they're done.</p></div>
+<div class="card"><h3>Locked-down rendering</h3><p>Isolated Chromium, no outbound network, JavaScript off by default.</p></div>
 <div class="card"><h3>Privacy first</h3><p>Documents are not kept after delivery by default. No trackers on this site.</p></div></div></section>
 <section><h2>Pricing</h2><div class="grid">
-<div class="card"><h3>Free</h3><div class="price">$0<small>/mo</small></div><ul><li>50 documents / month</li><li>All templates</li><li>Small "Made with SlipKiln" footer</li><li>No card required</li></ul></div>
-<div class="card"><h3>Starter</h3><div class="price">$9<small>/mo</small></div><ul><li>1,000 documents / month</li><li>Your logo, colors, fonts</li><li>No watermark</li><li>Overage $0.010 / doc</li></ul></div>
-<div class="card hl"><h3>Growth</h3><div class="price">$19<small>/mo</small></div><ul><li>3,000 documents / month</li><li>Async + webhooks</li><li>Saved templates</li><li>Overage $0.006 / doc</li></ul></div>
-<div class="card"><h3>Scale</h3><div class="price">$49<small>/mo</small></div><ul><li>10,000 documents / month</li><li>Batch jobs</li><li>Priority email support</li><li>Overage $0.004 / doc</li></ul></div>
-</div><p style="text-align:center;margin-top:30px"><a class="btn" href="mailto:support@slipkiln.com?subject=SlipKiln%20early%20access">Join early access</a></p></section></main>
-<footer><div class="wrap"><a href="pricing.html">Pricing</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refunds.html">Refunds</a><a href="mailto:support@slipkiln.com">support@slipkiln.com</a><br>&copy; 2026 DJ Solutions LLC, a Colorado limited liability company. SlipKiln is a product of DJ Solutions LLC.</div></footer>
-</body></html>
+<div class="card"><h3>Free</h3><div class="price">$0<small>/mo</small></div><ul><li>50 documents / month</li><li>All templates</li><li>HTML &amp; template rendering</li><li>No card required</li></ul><a class="btn ghost sm" href="/signup.html">Start free</a></div>
+<div class="card"><h3>Starter</h3><div class="price">$9<small>/mo</small></div><ul><li>1,000 documents / month</li><li>Your logo, colors, fonts</li><li>Email support</li><li>Overage $0.010 / doc</li></ul><a class="btn sm" href="/signup.html?plan=starter">Choose Starter</a></div>
+<div class="card hl"><h3>Growth</h3><div class="price">$19<small>/mo</small></div><ul><li>3,000 documents / month</li><li>Your logo, colors, fonts</li><li>Email support</li><li>Overage $0.006 / doc</li></ul><a class="btn sm" href="/signup.html?plan=growth">Choose Growth</a></div>
+<div class="card"><h3>Scale</h3><div class="price">$49<small>/mo</small></div><ul><li>10,000 documents / month</li><li>Your logo, colors, fonts</li><li>Priority email support</li><li>Overage $0.004 / doc</li></ul><a class="btn sm" href="/signup.html?plan=scale">Choose Scale</a></div>
+</div><p style="text-align:center;margin-top:30px"><a class="btn" href="/signup.html">Get your free API key</a></p></section></main>
+<footer><div class="wrap"><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refunds.html">Refunds</a><a href="mailto:support@slipkiln.com">support@slipkiln.com</a><br>&copy; 2026 DJ Solutions LLC, a Colorado limited liability company. SlipKiln is a product of DJ Solutions LLC.</div></footer>
+<script src="/app.js" defer></script></body></html>

@@ -1,0 +1,62 @@
+openapi: 3.1.0
+info: { title: SlipKiln API, version: 0.1.0, description: "JSON/HTML to branded PDF. Auth with `Authorization: Bearer <api_key>`." }
+servers: [{ url: https://api.slipkiln.com }]
+components:
+  securitySchemes: { bearer: { type: http, scheme: bearer } }
+  schemas:
+    Error: { type: object, properties: { error: { type: string }, message: { type: string } } }
+    Options:
+      type: object
+      properties:
+        format: { enum: [A4, A5, Letter, Legal] }
+        landscape: { type: boolean }
+        print_background: { type: boolean, default: true }
+        javascript: { type: boolean, default: false, description: "HTML endpoint only. Network stays blocked." }
+        margin: { type: object, properties: { top: { type: string, example: 10mm }, right: { type: string }, bottom: { type: string }, left: { type: string } } }
+  responses:
+    PDF: { description: PDF document, headers: { x-usage-month: { schema: { type: integer } } }, content: { application/pdf: { schema: { type: string, format: binary } } } }
+    Err: { description: Error, content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } } }
+security: [{ bearer: [] }]
+paths:
+  /v1/signup:
+    post:
+      security: []
+      summary: Create a free account and API key (shown once). Emails are normalized (lowercase, +tags stripped, Gmail dots removed); disposable domains rejected; `website` is a honeypot and must be empty.
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [email], properties: { email: { type: string, format: email } } } } } }
+      responses: { "201": { description: Created, content: { application/json: { schema: { type: object, properties: { api_key: { type: string }, plan: { type: string }, monthly_limit: { type: integer } } } } } }, "400": { $ref: "#/components/responses/Err" }, "409": { $ref: "#/components/responses/Err" } }
+  /v1/me:
+    get: { summary: Current plan and usage, responses: { "200": { description: OK }, "401": { $ref: "#/components/responses/Err" } } }
+  /v1/templates:
+    get: { security: [], summary: List templates with example data, responses: { "200": { description: OK } } }
+  /v1/render/html:
+    post:
+      summary: Render HTML to PDF
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [html], properties: { html: { type: string, maxLength: 2000000 }, options: { $ref: "#/components/schemas/Options" } } } } } }
+      responses: &renderResponses
+        "200": { $ref: "#/components/responses/PDF" }
+        "400": { $ref: "#/components/responses/Err" }
+        "401": { $ref: "#/components/responses/Err" }
+        "402": { description: Free monthly quota exhausted, content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } } }
+        "408": { description: Render exceeded 15s, content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } } }
+        "413": { description: Payload or PDF too large, content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } } }
+        "429": { description: Rate limited }
+        "503": { description: Renderer busy }
+  /v1/render/template:
+    post:
+      summary: Render a built-in template with JSON data
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [template, data], properties: { template: { enum: [invoice, receipt, certificate] }, data: { type: object }, options: { $ref: "#/components/schemas/Options" } } } } } }
+      responses: *renderResponses
+  /v1/billing/checkout:
+    post:
+      summary: Stripe Checkout URL for a paid plan
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [plan], properties: { plan: { enum: [starter, growth, scale] } } } } } }
+      responses: { "200": { description: OK, content: { application/json: { schema: { type: object, properties: { url: { type: string }, id: { type: string } } } } } }, "400": { $ref: "#/components/responses/Err" }, "409": { $ref: "#/components/responses/Err" } }
+  /v1/billing/change-plan:
+    post:
+      summary: Switch an active subscription between starter, growth and scale (prorated)
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [plan], properties: { plan: { enum: [starter, growth, scale] } } } } } }
+      responses: { "200": { description: OK }, "400": { $ref: "#/components/responses/Err" }, "409": { $ref: "#/components/responses/Err" } }
+  /v1/billing/portal:
+    post: { summary: Stripe Customer Portal URL, responses: { "200": { description: OK }, "400": { $ref: "#/components/responses/Err" } } }
+  /webhooks/stripe:
+    post: { security: [], summary: "Stripe webhook (signature-verified): checkout.session.completed, customer.subscription.updated/deleted", responses: { "200": { description: OK }, "400": { description: Bad signature } } }

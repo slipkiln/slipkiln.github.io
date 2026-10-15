@@ -1,0 +1,66 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>API docs | SlipKiln</title><meta name="description" content="SlipKiln: a simple, usage-billed API that turns JSON or HTML into branded PDF invoices, receipts and certificates.">
+<link rel="stylesheet" href="/style.css"></head><body>
+<header><div class="wrap"><a class="logo" href="/">Slip<span>Kiln</span></a><nav><a href="/#how">How it works</a><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a class="navcta" href="/signup.html">Get API key</a></nav></div></header>
+<main class="wrap"><div class="docs"><aside><a href="#quickstart">Quickstart</a><a href="#auth">Authentication</a><a href="#html">POST /v1/render/html</a><a href="#template">POST /v1/render/template</a><a href="#templates">Templates</a><a href="#options">Render options</a><a href="#account">Account &amp; billing</a><a href="#errors">Errors</a><a href="#limits">Limits &amp; security</a><a href="/openapi.yaml">OpenAPI spec</a></aside><div>
+<h1>SlipKiln API</h1><p>Base URL: <code>https://api.slipkiln.com</code>. All requests and responses are JSON, except render endpoints, which return <code>application/pdf</code>.</p>
+<h2 id="quickstart">Quickstart</h2><ol><li><a href="/signup.html">Get a free API key</a> (50 documents/month).</li><li>Send HTML or JSON, get a PDF back.</li></ol>
+<div><div class="tabs"><button class="on" data-lang="curl">curl</button><button data-lang="js">JavaScript</button><button data-lang="py">Python</button></div><pre data-lang="curl">curl -X POST https://api.slipkiln.com/v1/render/template \
+  -H "Authorization: Bearer $SLIPKILN_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"template":"invoice","data":{"number":"INV-1001","currency":"USD",
+       "customer":{"name":"Acme Co."},
+       "items":[{"description":"Consulting","qty":10,"unit_price":120}]}}' \
+  -o invoice.pdf</pre><pre data-lang="js" class="hidden">const res = await fetch("https://api.slipkiln.com/v1/render/template", {
+  method: "POST",
+  headers: { Authorization: `Bearer ${process.env.SLIPKILN_KEY}`, "Content-Type": "application/json" },
+  body: JSON.stringify({
+    template: "invoice",
+    data: { number: "INV-1001", currency: "USD", customer: { name: "Acme Co." },
+            items: [{ description: "Consulting", qty: 10, unit_price: 120 }] },
+  }),
+});
+if (!res.ok) throw new Error((await res.json()).message);
+await require("fs/promises").writeFile("invoice.pdf", Buffer.from(await res.arrayBuffer()));</pre><pre data-lang="py" class="hidden">import os, requests
+
+r = requests.post(
+    "https://api.slipkiln.com/v1/render/template",
+    headers={"Authorization": f"Bearer {os.environ['SLIPKILN_KEY']}"},
+    json={"template": "invoice",
+          "data": {"number": "INV-1001", "currency": "USD", "customer": {"name": "Acme Co."},
+                   "items": [{"description": "Consulting", "qty": 10, "unit_price": 120}]}},
+    timeout=30,
+)
+r.raise_for_status()
+open("invoice.pdf", "wb").write(r.content)</pre></div>
+<h2 id="auth">Authentication</h2><p>Send your key as a bearer token: <code>Authorization: Bearer sk_…</code>. Keys are shown once at signup and stored only as a hash, so we can't recover a lost key. Email <a href="mailto:support@slipkiln.com">support@slipkiln.com</a> if you lose yours. Keep keys server-side. Don't ship them in browser or mobile code.</p>
+<p>Create a key with <code>POST /v1/signup</code> <code>{"email":"you@company.com"}</code> → <code>201 {"api_key":"sk_…","plan":"free","monthly_limit":50}</code>. One account per email.</p>
+<h2 id="html">POST /v1/render/html</h2><p>Render your own HTML/CSS with a headless Chromium.</p>
+<table><tr><th>Field</th><th>Type</th><th></th></tr><tr><td><code>html</code></td><td>string, required</td><td>Full HTML document or fragment (≤ 2 MB). Images, fonts and CSS must be inlined as <code>data:</code> URIs. External URLs are blocked.</td></tr><tr><td><code>options</code></td><td>object</td><td>See <a href="#options">render options</a>.</td></tr></table>
+<div><div class="tabs"><button class="on" data-lang="curl">curl</button><button data-lang="js">JavaScript</button><button data-lang="py">Python</button></div><pre data-lang="curl">curl -X POST https://api.slipkiln.com/v1/render/html \
+  -H "Authorization: Bearer $SLIPKILN_KEY" -H "Content-Type: application/json" \
+  -d '{"html":"&lt;h1 style=\"color:#0f766e\"&gt;Hello PDF&lt;/h1&gt;","options":{"format":"Letter","margin":{"top":"20mm"}}}' \
+  -o hello.pdf</pre><pre data-lang="js" class="hidden">const res = await fetch("https://api.slipkiln.com/v1/render/html", {
+  method: "POST",
+  headers: { Authorization: `Bearer ${process.env.SLIPKILN_KEY}`, "Content-Type": "application/json" },
+  body: JSON.stringify({ html: "&lt;h1&gt;Hello PDF&lt;/h1&gt;", options: { format: "Letter" } }),
+});
+const pdf = Buffer.from(await res.arrayBuffer());</pre><pre data-lang="py" class="hidden">r = requests.post("https://api.slipkiln.com/v1/render/html",
+    headers={"Authorization": f"Bearer {os.environ['SLIPKILN_KEY']}"},
+    json={"html": "&lt;h1&gt;Hello PDF&lt;/h1&gt;", "options": {"format": "Letter"}}, timeout=30)
+open("hello.pdf", "wb").write(r.content)</pre></div>
+<p>Successful responses include <code>x-usage-month</code>: documents rendered by your account this month.</p>
+<h2 id="template">POST /v1/render/template</h2><p><code>{"template": "invoice" | "receipt" | "certificate", "data": {…}, "options": {…}}</code>. All text is HTML-escaped. <code>GET /v1/templates</code> (no auth) returns every template with full example data.</p>
+<h2 id="templates">Templates</h2>
+<p><b>Shared <code>brand</code> object</b> (all templates):</p><table><tr><td><code>brand.name</code></td><td>string</td><td>Shown when no logo is given</td></tr><tr><td><code>brand.logo</code></td><td>string</td><td>Base64 <code>data:image/png|jpeg|gif|webp|svg+xml;base64,…</code> only</td></tr><tr><td><code>brand.color</code></td><td>string</td><td>Hex accent color, e.g. <code>#0f766e</code></td></tr><tr><td><code>brand.email</code>, <code>brand.website</code></td><td>string</td><td>Contact lines</td></tr><tr><td><code>brand.address</code></td><td>string[]</td><td>Address lines</td></tr></table>
+<h3>invoice (A4)</h3><table><tr><td><code>number</code></td><td>string</td><td>Invoice number</td></tr><tr><td><code>issue_date</code>, <code>due_date</code></td><td>string</td><td>Printed as given</td></tr><tr><td><code>currency</code></td><td>string</td><td>ISO 4217, default <code>USD</code></td></tr><tr><td><code>customer</code></td><td>object</td><td><code>name</code>, <code>email</code>, <code>address</code> (string[])</td></tr><tr><td><code>items</code></td><td>array</td><td><code>{description, qty, unit_price}</code>, max 500. Totals are computed.</td></tr><tr><td><code>tax_rate</code></td><td>number</td><td>Percent, e.g. <code>8.25</code></td></tr><tr><td><code>notes</code></td><td>string</td><td>Footer note</td></tr></table>
+<h3>receipt (A5)</h3><table><tr><td><code>number</code>, <code>date</code></td><td>string</td><td></td></tr><tr><td><code>payment_method</code></td><td>string</td><td>e.g. "Visa •••• 4242"</td></tr><tr><td><code>currency</code>, <code>tax_rate</code>, <code>items</code></td><td></td><td>Same as invoice</td></tr><tr><td><code>customer.name</code></td><td>string</td><td></td></tr></table>
+<h3>certificate (A4 landscape)</h3><table><tr><td><code>title</code></td><td>string</td><td>e.g. "Certificate of Completion"</td></tr><tr><td><code>recipient</code></td><td>string</td><td>Name</td></tr><tr><td><code>description</code></td><td>string</td><td>Body text</td></tr><tr><td><code>date</code></td><td>string</td><td></td></tr><tr><td><code>signer</code></td><td>object</td><td><code>name</code>, <code>title</code></td></tr><tr><td><code>certificate_id</code></td><td>string</td><td>Printed bottom-right</td></tr></table>
+<h2 id="options">Render options</h2><table><tr><td><code>format</code></td><td><code>A4</code> | <code>A5</code> | <code>Letter</code> | <code>Legal</code></td></tr><tr><td><code>landscape</code></td><td>boolean</td></tr><tr><td><code>margin</code></td><td><code>{top,right,bottom,left}</code>, values like <code>10mm</code>, <code>0.5in</code>, <code>20px</code></td></tr><tr><td><code>print_background</code></td><td>boolean, default true</td></tr><tr><td><code>javascript</code></td><td>boolean, default false (HTML endpoint only; network stays blocked)</td></tr></table>
+<h2 id="account">Account &amp; billing</h2><table><tr><td><code>GET /v1/me</code></td><td>Plan and usage this month</td></tr><tr><td><code>POST /v1/billing/checkout</code> <code>{"plan":"starter|growth|scale"}</code></td><td>Returns <code>{url}</code> to Stripe Checkout</td></tr><tr><td><code>POST /v1/billing/change-plan</code> <code>{"plan":…}</code></td><td>Switch paid plans (prorated)</td></tr><tr><td><code>POST /v1/billing/portal</code></td><td>Returns <code>{url}</code> to the Stripe billing portal (card, invoices, cancel)</td></tr></table><p>Or use the <a href="/billing.html">Billing page</a>.</p>
+<h2 id="errors">Errors</h2><p>Errors are JSON: <code>{"error":"code","message":"…"}</code>.</p><table><tr><th>Status</th><th>error</th><th>Meaning</th></tr>
+<tr><td>400</td><td><code>invalid_request</code>, <code>invalid_template</code>, <code>invalid_email</code>, <code>invalid_plan</code></td><td>Bad input</td></tr><tr><td>401</td><td><code>unauthorized</code></td><td>Missing/invalid key</td></tr><tr><td>402</td><td><code>quota_exceeded</code></td><td>Free plan's 50 docs used this month</td></tr><tr><td>408</td><td><code>render_timeout</code></td><td>Render took over 15 s</td></tr><tr><td>409</td><td><code>email_exists</code>, <code>already_subscribed</code></td><td>Conflict</td></tr><tr><td>413</td><td><code>render_too_large</code> / body too large</td><td>Request &gt; 2 MB or PDF &gt; 20 MB</td></tr><tr><td>422</td><td><code>render_failed</code></td><td>Chromium could not render</td></tr><tr><td>429</td><td></td><td>Rate limited; retry after the <code>retry-after</code> header</td></tr><tr><td>503</td><td><code>render_busy</code></td><td>Temporarily at capacity; retry with backoff</td></tr></table>
+<h2 id="limits">Limits &amp; security</h2><ul><li>60 requests/minute per key; signup 5/hour per IP.</li><li>Free: 50 successful documents per calendar month (UTC). Failed renders don't count. Paid plans: included documents, then per-document overage (see <a href="/pricing.html">pricing</a>).</li><li>Request body ≤ 2 MB; PDF ≤ 20 MB; 15 s per render.</li><li>Rendering runs in an isolated Chromium with <b>no network access</b>: only <code>data:</code> URIs load. JavaScript is off unless you set <code>options.javascript</code>.</li><li>Documents are processed in memory and not stored after delivery.</li></ul>
+</div></div></main>
+<footer><div class="wrap"><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refunds.html">Refunds</a><a href="mailto:support@slipkiln.com">support@slipkiln.com</a><br>&copy; 2026 DJ Solutions LLC, a Colorado limited liability company. SlipKiln is a product of DJ Solutions LLC.</div></footer>
+<script src="/app.js" defer></script></body></html>

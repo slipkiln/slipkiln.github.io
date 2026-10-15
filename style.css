@@ -14,3 +14,16 @@ section{padding:40px 0}h2{font-size:28px}pre{background:var(--panel);border:1px 
 table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--line);padding:10px;text-align:left}
 .legal{max-width:760px}.legal h2{font-size:21px;margin-top:32px}.draft{background:#3b2300;border:1px solid var(--acc);border-radius:8px;padding:12px 16px;color:var(--acc2)}
 footer{border-top:1px solid var(--line);margin-top:60px;padding:28px 0;color:var(--mute);font-size:14px}footer a{color:var(--mute);margin-right:14px}
+nav a.navcta{background:var(--acc);color:#111;padding:6px 12px;border-radius:6px;font-weight:700}
+.btn.sm{padding:8px 14px;font-size:14px;margin:8px 0 0}.card .btn.ghost.sm{margin-left:0}
+.form{max-width:560px}.form label{display:block;margin:14px 0 6px;color:var(--mute)}
+.form input[type=email],.form input[type=text],.form input[type=password]{width:100%;padding:11px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--fg);font-size:16px}
+.form button,.plans button{cursor:pointer;border:0;font-size:15px}.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.keybox{display:flex;gap:8px;margin:10px 0}.keybox code{flex:1;background:var(--panel);border:1px solid var(--acc);border-radius:8px;padding:11px;font:14px ui-monospace,monospace;word-break:break-all}
+.msg{margin-top:14px;padding:10px 14px;border-radius:8px;display:none}.msg.err{display:block;background:#3d1214;border:1px solid #f85149;color:#ffa198}.msg.ok{display:block;background:#0f2a1a;border:1px solid #3fb950;color:#7ee787}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}.plans button{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:left}
+.plans button:hover,.plans button.sel{border-color:var(--acc)}.plans b{display:block;font-size:18px}
+.hidden{display:none!important}code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em}p code,li code,td code{background:var(--panel);padding:1px 5px;border-radius:4px}
+.docs{display:grid;grid-template-columns:200px 1fr;gap:36px}.docs aside{position:sticky;top:20px;align-self:start;font-size:14px}.docs aside a{display:block;color:var(--mute);text-decoration:none;padding:3px 0}
+.docs h2{margin-top:44px;border-top:1px solid var(--line);padding-top:22px}.docs table{font-size:14px;margin:10px 0}.tabs button{background:var(--panel);color:var(--mute);border:1px solid var(--line);padding:5px 12px;border-radius:6px 6px 0 0;cursor:pointer}.tabs button.on{color:var(--fg);border-color:var(--acc)}
+@media(max-width:760px){.docs{grid-template-columns:1fr}.docs aside{position:static}.plans{grid-template-columns:1fr}nav a{margin-left:10px;font-size:14px}.hero h1{font-size:34px}}
