@@ -103,3 +103,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 main{min-height:calc(100vh - 190px)}
+.demo>div,.docs>div{min-width:0}
+@media (max-width:640px){.docs table{display:block;overflow-x:auto}.docs aside{margin:0 -20px 8px;padding:0 20px 12px}}
+p code,li code{overflow-wrap:anywhere}
