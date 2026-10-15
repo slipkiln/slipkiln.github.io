@@ -1,41 +1,39 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://api.slipkiln.com; form-action 'none'; base-uri 'none'; object-src 'none'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SlipKiln: JSON & HTML to branded PDF API</title><meta name="description" content="SlipKiln: a simple, usage-billed API that turns JSON or HTML into branded PDF invoices, receipts and certificates.">
-<link rel="stylesheet" href="/style.css"></head><body>
-<header><div class="wrap"><a class="logo" href="/">Slip<span>Kiln</span></a><nav><a href="/#how">How it works</a><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a class="navcta" href="/signup.html">Get API key</a></nav></div></header>
-<main class="wrap">
-<div id="subscribed" class="msg ok hidden" style="max-width:640px;margin:24px auto 0;text-align:center">Thanks for subscribing! Your plan is now active on your API key.</div><div class="hero"><h1>Branded PDFs from one API call.</h1><p>Send JSON or HTML, get back a pixel-perfect invoice, receipt or certificate with your logo and colors. Pay only for what you render.</p>
-<a class="btn" href="/signup.html">Get your free API key</a><a class="btn ghost" href="pricing.html">See pricing</a></div>
-<section id="how"><h2>How it works</h2><div class="grid">
-<div class="card step"><b>01</b><h3>Get an API key</h3><p>Sign up, add your logo and brand colors once.</p></div>
-<div class="card step"><b>02</b><h3>POST your data</h3><p>Send JSON to a ready-made template, or your own HTML/CSS.</p></div>
-<div class="card step"><b>03</b><h3>Get a PDF</h3><p>Receive the file directly, or a signed URL / webhook for async jobs.</p></div></div></section>
-<section><h2>Try it</h2><pre><span class="k">curl</span> https://api.slipkiln.com/v1/render \
-  -H <span class="s">"Authorization: Bearer $SLIPKILN_KEY"</span> \
-  -H <span class="s">"Content-Type: application/json"</span> \
-  -d <span class="s">'{
-    "template": "invoice",
-    "data": {
-      "number": "INV-1042",
-      "customer": { "name": "Acme Co." },
-      "items": [{ "description": "Consulting", "qty": 10, "unit_price": 120 }],
-      "currency": "USD"
-    }
-  }'</span> \
-  -o invoice.pdf
-<span class="c"># → invoice.pdf, branded with your logo and colors</span></pre>
-<p style="color:var(--mute)">50 free documents every month. No card required. <a href="/docs/">Read the docs</a>.</p></section>
-<section><h2>Features</h2><div class="grid">
-<div class="card"><h3>JSON templates</h3><p>Invoices, receipts and certificates out of the box. No layout code.</p></div>
-<div class="card"><h3>Bring your HTML</h3><p>Full modern CSS rendered by a headless browser engine.</p></div>
-<div class="card"><h3>Your brand</h3><p>Logo, colors and fonts applied to every document.</p></div>
-<div class="card"><h3>Usage billing</h3><p>Generous free tier, simple plans, fair per-document overage.</p></div>
-<div class="card"><h3>Locked-down rendering</h3><p>Isolated Chromium, no outbound network, JavaScript off by default.</p></div>
-<div class="card"><h3>Privacy first</h3><p>Documents are not kept after delivery by default. No trackers on this site.</p></div></div></section>
-<section><h2>Pricing</h2><div class="grid">
-<div class="card"><h3>Free</h3><div class="price">$0<small>/mo</small></div><ul><li>50 documents / month</li><li>All templates</li><li>HTML &amp; template rendering</li><li>No card required</li></ul><a class="btn ghost sm" href="/signup.html">Start free</a></div>
-<div class="card"><h3>Starter</h3><div class="price">$9<small>/mo</small></div><ul><li>1,000 documents / month</li><li>Your logo, colors, fonts</li><li>Email support</li><li>Overage $0.010 / doc</li></ul><a class="btn sm" href="/signup.html?plan=starter">Choose Starter</a></div>
-<div class="card hl"><h3>Growth</h3><div class="price">$19<small>/mo</small></div><ul><li>3,000 documents / month</li><li>Your logo, colors, fonts</li><li>Email support</li><li>Overage $0.006 / doc</li></ul><a class="btn sm" href="/signup.html?plan=growth">Choose Growth</a></div>
-<div class="card"><h3>Scale</h3><div class="price">$49<small>/mo</small></div><ul><li>10,000 documents / month</li><li>Your logo, colors, fonts</li><li>Priority email support</li><li>Overage $0.004 / doc</li></ul><a class="btn sm" href="/signup.html?plan=scale">Choose Scale</a></div>
-</div><p style="text-align:center;margin-top:30px"><a class="btn" href="/signup.html">Get your free API key</a></p></section></main>
-<footer><div class="wrap"><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refunds.html">Refunds</a><a href="mailto:support@slipkiln.com">support@slipkiln.com</a><br>&copy; 2026 DJ Solutions LLC, a Colorado limited liability company. SlipKiln is a product of DJ Solutions LLC.</div></footer>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://api.slipkiln.com; form-action 'none'; base-uri 'none'; object-src 'none'"><meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SlipKiln: branded PDFs from JSON or HTML</title><meta name="description" content="Send JSON or HTML, get a branded PDF invoice, receipt or certificate. 50 free documents a month.">
+<meta name="theme-color" content="#ffffff"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e8590c'/%3E%3C/svg%3E"><link rel="stylesheet" href="/style.css"></head><body>
+<div id="subscribed" class="banner hidden">You’re subscribed. Your plan is active on your API key.</div>
+<header class="top"><div class="wrap"><a class="logo" href="/"><i aria-hidden="true"></i>SlipKiln</a><nav class="nav"><a class="hide-sm" href="/pricing.html">Pricing</a><a class="" href="/docs/">Docs</a><a class="hide-sm" href="/billing.html">Billing</a><a class="btn sm" href="/signup.html">Get API key</a></nav></div></header>
+<main>
+<section class="hero center"><div class="wrap">
+<div class="eyebrow">PDF API for developers</div>
+<h1>Branded PDFs from one API call</h1>
+<p class="lead">Send JSON or HTML. Get back a clean invoice, receipt or certificate with your logo and colors.</p>
+<div class="actions"><a class="btn lg" href="/signup.html">Get a free API key</a><a class="btn link" href="/docs/">Read the docs →</a></div>
+<p class="small" style="margin-top:14px">50 free documents a month · No card needed</p>
+<div class="demo" style="text-align:left"><div><pre class="code"><span class="t-k">curl</span> https://api.slipkiln.com/v1/render/template \
+  -H <span class="t-s">"Authorization: Bearer $SLIPKILN_KEY"</span> \
+  -H <span class="t-s">"Content-Type: application/json"</span> \
+  -d <span class="t-s">'{"template":"invoice","data":{
+        "number":"INV-1042","currency":"USD",
+        "customer":{"name":"Acme Co."},
+        "items":[{"description":"Consulting","qty":10,"unit_price":120}]}}'</span> \
+  -o invoice.pdf</pre></div>
+<div><div class="paper"><img src="/assets/invoice.png" alt="The invoice PDF this request returns" width="414" height="586"></div><p class="arrow">↑ The PDF you get back</p></div></div>
+</div></section>
+<section class="soft"><div class="wrap"><div class="center"><h2>Start with a template</h2><p class="lead">Fill in the JSON. We handle layout, totals and fonts.</p></div>
+<div class="grid g3" style="margin-top:32px"><a class="tpl" href="/docs/#t-invoice"><div class="thumb"><img src="/assets/invoice.png" alt="Invoice template preview" loading="lazy"></div><h3>Invoice</h3><p>Line items, tax and totals, calculated for you.</p></a><a class="tpl" href="/docs/#t-receipt"><div class="thumb"><img src="/assets/receipt.png" alt="Receipt template preview" loading="lazy"></div><h3>Receipt</h3><p>A compact paid receipt for any purchase.</p></a><a class="tpl" href="/docs/#t-certificate"><div class="thumb"><img src="/assets/certificate.png" alt="Certificate template preview" loading="lazy"></div><h3>Certificate</h3><p>Landscape award or course certificate.</p></a></div>
+<p class="center small" style="margin-top:24px">Need something custom? Send your own HTML and CSS.</p></div></section>
+<section><div class="wrap"><h2 class="center" style="margin-bottom:32px">How it works</h2><div class="grid g3">
+<div class="card step"><div class="n">1</div><h3>Get a key</h3><p>Enter your email. Your key appears right away.</p></div>
+<div class="card step"><div class="n">2</div><h3>Send your data</h3><p>POST JSON to a template, or your own HTML.</p></div>
+<div class="card step"><div class="n">3</div><h3>Get a PDF</h3><p>The response is the PDF file. Save it or send it on.</p></div></div></div></section>
+<section class="soft"><div class="wrap"><div class="grid g4">
+<div><h3>Your brand</h3><p class="small">Logo, accent color and contact details on every page.</p></div>
+<div><h3>Pay as you go</h3><p class="small">Free to start. Simple plans with low per-document overage.</p></div>
+<div><h3>Locked down</h3><p class="small">Isolated rendering with no outbound network access.</p></div>
+<div><h3>Private</h3><p class="small">Documents aren’t stored after delivery. No trackers on this site.</p></div></div></div></section>
+<section><div class="wrap"><div class="center"><h2>Simple pricing</h2><p class="lead">Start free. Upgrade when you need more.</p></div><div style="margin-top:32px"><div class="grid g4"><div class="card plan"><h3>Free</h3><div class="price">$0<small>/mo</small></div><ul><li>50 documents / month</li><li>All templates and HTML</li><li>No card needed</li></ul><a class="btn alt" href="/signup.html">Start free</a></div><div class="card plan"><h3>Starter</h3><div class="price">$9<small>/mo</small></div><ul><li>1,000 documents / month</li><li>$0.010 per extra document</li><li>Email support</li></ul><a class="btn alt" href="/signup.html?plan=starter">Choose Starter</a></div><div class="card plan pop"><h3>Growth<span class="badge">Popular</span></h3><div class="price">$19<small>/mo</small></div><ul><li>3,000 documents / month</li><li>$0.006 per extra document</li><li>Email support</li></ul><a class="btn alt" href="/signup.html?plan=growth">Choose Growth</a></div><div class="card plan"><h3>Scale</h3><div class="price">$49<small>/mo</small></div><ul><li>10,000 documents / month</li><li>$0.004 per extra document</li><li>Priority email support</li></ul><a class="btn alt" href="/signup.html?plan=scale">Choose Scale</a></div></div></div>
+<p class="center small" style="margin-top:20px"><a href="/pricing.html">Pricing details and FAQ</a></p></div></section></main>
+<footer><div class="wrap"><div>© 2026 DJ Solutions LLC · <a href="mailto:support@slipkiln.com">support@slipkiln.com</a></div>
+<nav><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/refunds.html">Refunds</a></nav></div></footer>
 <script src="/app.js" defer></script></body></html>

@@ -1,15 +1,18 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://api.slipkiln.com; form-action 'none'; base-uri 'none'; object-src 'none'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Billing | SlipKiln</title><meta name="description" content="SlipKiln: a simple, usage-billed API that turns JSON or HTML into branded PDF invoices, receipts and certificates.">
-<link rel="stylesheet" href="/style.css"></head><body>
-<header><div class="wrap"><a class="logo" href="/">Slip<span>Kiln</span></a><nav><a href="/#how">How it works</a><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a class="navcta" href="/signup.html">Get API key</a></nav></div></header>
-<main class="wrap"><section class="form"><h1>Manage billing</h1>
-
-<form id="billing-form"><div id="bkey-saved" class="hidden"><label>Your API key (saved in this browser)</label><div class="keywidget" data-keywidget></div></div>
-<div id="bkey-entry"><label for="bkey">Your API key</label><input id="bkey" type="password" autocomplete="off" placeholder="sk_…">
-<p style="color:var(--mute);font-size:14px">Sent only to api.slipkiln.com. After it works once, it's remembered in this browser (you can forget it any time).</p></div>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://api.slipkiln.com; form-action 'none'; base-uri 'none'; object-src 'none'"><meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Billing | SlipKiln</title><meta name="description" content="Manage your SlipKiln plan, card and invoices.">
+<meta name="theme-color" content="#ffffff"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e8590c'/%3E%3C/svg%3E"><link rel="stylesheet" href="/style.css"></head><body>
+<div id="subscribed" class="banner hidden">You’re subscribed. Your plan is active on your API key.</div>
+<header class="top"><div class="wrap"><a class="logo" href="/"><i aria-hidden="true"></i>SlipKiln</a><nav class="nav"><a class="hide-sm" href="/pricing.html">Pricing</a><a class="" href="/docs/">Docs</a><a class="hide-sm" href="/billing.html" aria-current="page">Billing</a><a class="btn sm" href="/signup.html">Get API key</a></nav></div></header>
+<main>
+<section><div class="wrap narrow"><h1>Billing</h1><p class="lead">Update your card, see invoices, change plan or cancel.</p>
+<form id="billing-form" class="panel" novalidate>
+<div id="bkey-saved" class="hidden"><label>Your API key</label><div data-keywidget></div></div>
+<div id="bkey-entry"><label for="bkey">Your API key</label><input id="bkey" type="password" autocomplete="off" spellcheck="false" placeholder="sk_…">
+<p class="small" style="margin:8px 0 16px">Sent only to api.slipkiln.com, then remembered in this browser.</p></div>
 <button class="btn" type="submit">Open billing portal</button>
-<p style="color:var(--mute);font-size:14px">Update your card, see invoices, or cancel (cancellation applies at the end of the billing period).</p></form>
-<div id="change"><h2>Upgrade or switch plan</h2><p style="color:var(--mute)">Already subscribed? Switching is prorated. On Free? You'll go to Stripe Checkout.</p><div class="plans"><button type="button" data-plan="starter"><b>Starter</b>$9/mo · 1,000 docs</button><button type="button" data-plan="growth"><b>Growth</b>$19/mo · 3,000 docs</button><button type="button" data-plan="scale"><b>Scale</b>$49/mo · 10,000 docs</button></div></div>
-<div id="billing-msg" class="msg"></div></section></main>
-<footer><div class="wrap"><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refunds.html">Refunds</a><a href="mailto:support@slipkiln.com">support@slipkiln.com</a><br>&copy; 2026 DJ Solutions LLC, a Colorado limited liability company. SlipKiln is a product of DJ Solutions LLC.</div></footer>
+<div id="billing-msg" class="msg" role="alert"></div></form>
+<div id="change" style="margin-top:40px"><h2 style="font-size:22px">Change plan</h2><p class="small">Paid plans switch right away with prorated billing. On Free, you’ll go to checkout.</p><div class="plans"><button type="button" data-plan="starter"><b>Starter · $9/mo</b>1,000 documents</button><button type="button" data-plan="growth"><b>Growth · $19/mo</b>3,000 documents</button><button type="button" data-plan="scale"><b>Scale · $49/mo</b>10,000 documents</button></div>
+<div id="change-msg" class="msg" role="alert"></div></div></div></section></main>
+<footer><div class="wrap"><div>© 2026 DJ Solutions LLC · <a href="mailto:support@slipkiln.com">support@slipkiln.com</a></div>
+<nav><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/refunds.html">Refunds</a></nav></div></footer>
 <script src="/app.js" defer></script></body></html>
