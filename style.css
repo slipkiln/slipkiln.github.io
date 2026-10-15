@@ -1,0 +1,16 @@
+:root{--bg:#0d1117;--panel:#161b22;--line:#30363d;--fg:#e6edf3;--mute:#8b949e;--acc:#ff7a45;--acc2:#ffb86b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--acc2)}.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--line)}header .wrap{display:flex;justify-content:space-between;align-items:center;height:60px}
+.logo{font-weight:800;font-size:20px;color:var(--fg);text-decoration:none}.logo span{color:var(--acc)}
+nav a{color:var(--mute);text-decoration:none;margin-left:18px}nav a:hover{color:var(--fg)}
+.hero{padding:80px 0 50px;text-align:center}.hero h1{font-size:46px;line-height:1.15;margin:0 0 16px}.hero p{color:var(--mute);font-size:19px;max-width:640px;margin:0 auto 28px}
+.btn{display:inline-block;background:var(--acc);color:#111;font-weight:700;padding:12px 22px;border-radius:8px;text-decoration:none}.btn.ghost{background:none;color:var(--fg);border:1px solid var(--line);margin-left:8px}
+section{padding:40px 0}h2{font-size:28px}pre{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;overflow:auto;font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:#c9d1d9}
+.k{color:#ff7b72}.s{color:#a5d6ff}.c{color:#8b949e}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px}.card h3{margin:0 0 6px}.card p{margin:0;color:var(--mute)}
+.step b{color:var(--acc);font-family:ui-monospace,monospace}
+.price{font-size:34px;font-weight:800}.price small{font-size:15px;color:var(--mute);font-weight:400}.card ul{padding-left:18px;color:var(--mute)}.card.hl{border-color:var(--acc)}
+table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid var(--line);padding:10px;text-align:left}
+.legal{max-width:760px}.legal h2{font-size:21px;margin-top:32px}.draft{background:#3b2300;border:1px solid var(--acc);border-radius:8px;padding:12px 16px;color:var(--acc2)}
+footer{border-top:1px solid var(--line);margin-top:60px;padding:28px 0;color:var(--mute);font-size:14px}footer a{color:var(--mute);margin-right:14px}
