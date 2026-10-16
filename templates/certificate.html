@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://api.slipkiln.com; form-action 'none'; base-uri 'none'; object-src 'none'"><meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Certificate PDF API: JSON to Certificate PDF | SlipKiln</title><meta name="description" content="Generate course and award certificate PDFs from JSON, with your brand color. Free for 50 PDFs/month."><link rel="canonical" href="https://slipkiln.com/templates/certificate.html"><meta property="og:title" content="Certificate PDF API: JSON to Certificate PDF | SlipKiln"><meta property="og:description" content="Generate course and award certificate PDFs from JSON, with your brand color. Free for 50 PDFs/month.">
+<meta name="theme-color" content="#ffffff"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e8590c'/%3E%3C/svg%3E"><link rel="stylesheet" href="/style.css"></head><body>
+<header class="top"><div class="wrap"><a class="logo" href="/"><i aria-hidden="true"></i>SlipKiln</a><nav class="nav"><a class="hide-sm" href="/templates/" aria-current="page">Templates</a><a class="hide-sm" href="/pricing.html">Pricing</a><a class="" href="/docs/">Docs</a><a class="btn sm" href="/signup.html">Get API key</a></nav></div></header>
+<main><section class="hero center" style="padding-bottom:32px"><div class="wrap"><p class="small"><a href="/templates/">Templates</a> / Certificate</p><h1>Certificate PDF API</h1><p class="lead">Generate course and award certificate PDFs from JSON, with your brand color. Free for 50 documents a month.</p><div class="actions"><a class="btn lg" href="/signup.html">Get a free API key</a><a href="/docs/#template">Read the docs</a></div></div></section>
+<section class="tight" style="padding-top:0"><div class="wrap"><div class="grid g2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px;align-items:start">
+<div><img src="/assets/certificate.png" alt="Sample certificate PDF rendered by SlipKiln" style="width:100%;border:1px solid var(--line);border-radius:var(--r);box-shadow:0 8px 30px rgba(0,0,0,.08)"></div>
+<div><h2 style="font-size:22px">1. Save this as <code>certificate.json</code></h2><pre>{
+  &quot;template&quot;: &quot;certificate&quot;,
+  &quot;data&quot;: {
+    &quot;brand&quot;: {
+      &quot;name&quot;: &quot;Northwind Studio&quot;,
+      &quot;color&quot;: &quot;#0f766e&quot;,
+      &quot;email&quot;: &quot;billing@northwind.example&quot;,
+      &quot;website&quot;: &quot;northwind.example&quot;,
+      &quot;address&quot;: [
+        &quot;100 Market St&quot;,
+        &quot;Denver, CO 80202&quot;
+      ]
+    },
+    &quot;title&quot;: &quot;Certificate of Completion&quot;,
+    &quot;recipient&quot;: &quot;Jamie Rivera&quot;,
+    &quot;description&quot;: &quot;for successfully completing the Advanced Data Visualization course (24 hours).&quot;,
+    &quot;date&quot;: &quot;October 15, 2026&quot;,
+    &quot;signer&quot;: {
+      &quot;name&quot;: &quot;Morgan Lee&quot;,
+      &quot;title&quot;: &quot;Program Director&quot;
+    },
+    &quot;certificate_id&quot;: &quot;NW-2026-00412&quot;
+  }
+}</pre><h2 style="font-size:22px">2. Render it</h2><pre>curl -X POST https://api.slipkiln.com/v1/render/template \
+  -H &quot;Authorization: Bearer $SLIPKILN_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d @certificate.json \
+  -o certificate.pdf</pre><p class="small">You get back a PDF. Change <code>brand.color</code> and <code>brand.name</code> to match your business. All text is HTML-escaped. Need a custom layout? Send your own HTML to <a href="/docs/#html"><code>/v1/render/html</code></a>.</p></div></div></div></section></main>
+<footer><div class="wrap"><div>© 2026 DJ Solutions LLC · <a href="mailto:support@slipkiln.com">support@slipkiln.com</a></div>
+<nav><a href="/templates/">Templates</a><a href="/compare/">Compare</a><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/refunds.html">Refunds</a></nav></div></footer>
+<script src="/app.js" defer></script></body></html>

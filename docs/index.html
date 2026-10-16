@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>API docs | SlipKiln</title><meta name="description" content="SlipKiln API reference: authentication, endpoints, templates, errors and limits.">
 <meta name="theme-color" content="#ffffff"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e8590c'/%3E%3C/svg%3E"><link rel="stylesheet" href="/style.css"></head><body>
 
-<header class="top"><div class="wrap"><a class="logo" href="/"><i aria-hidden="true"></i>SlipKiln</a><nav class="nav"><a class="hide-sm" href="/pricing.html">Pricing</a><a class="" href="/docs/" aria-current="page">Docs</a><a class="hide-sm" href="/billing.html">Billing</a><a class="btn sm" href="/signup.html">Get API key</a></nav></div></header>
+<header class="top"><div class="wrap"><a class="logo" href="/"><i aria-hidden="true"></i>SlipKiln</a><nav class="nav"><a class="hide-sm" href="/templates/">Templates</a><a class="hide-sm" href="/pricing.html">Pricing</a><a class="" href="/docs/" aria-current="page">Docs</a><a class="hide-sm" href="/billing.html">Billing</a><a class="btn sm" href="/signup.html">Get API key</a></nav></div></header>
 <main><div class="wrap docs"><aside id="docnav"><div class="grp">Start</div><a href="#quickstart">Quickstart</a><a href="#auth">Authentication</a>
 <div class="grp">Render</div><a href="#html">HTML to PDF</a><a href="#template">Template to PDF</a><a href="#templates">Templates</a><a href="#options">Options</a>
 <div class="grp">Reference</div><a href="#account">Account &amp; billing</a><a href="#errors">Errors</a><a href="#limits">Limits</a><a href="/openapi.yaml">OpenAPI spec</a></aside><div>
@@ -66,5 +66,5 @@ open("hello.pdf", "wb").write(r.content)</pre></div>
 <h2 id="limits">Limits &amp; security</h2><ul><li>60 requests/minute per key; signup 5/hour per IP.</li><li>Free: 50 successful documents per calendar month (UTC). Failed renders don't count. Paid plans: included documents, then per-document overage (see <a href="/pricing.html">pricing</a>).</li><li>Request body ≤ 2 MB; PDF ≤ 20 MB; 15 s per render.</li><li>Rendering runs in an isolated Chromium with <b>no network access</b>: only <code>data:</code> URIs load. JavaScript is off unless you set <code>options.javascript</code>.</li><li>Documents are processed in memory and not stored after delivery.</li></ul>
 </div></div></main>
 <footer><div class="wrap"><div>© 2026 DJ Solutions LLC · <a href="mailto:support@slipkiln.com">support@slipkiln.com</a></div>
-<nav><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/refunds.html">Refunds</a></nav></div></footer>
+<nav><a href="/templates/">Templates</a><a href="/compare/">Compare</a><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/refunds.html">Refunds</a></nav></div></footer>
 <script src="/app.js" defer></script></body></html>
