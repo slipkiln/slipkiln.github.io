@@ -1,0 +1,1 @@
+(function(){try{if(navigator.webdriver)return;var r="-";if(document.referrer){var h=new URL(document.referrer).hostname;if(h&&h!==location.hostname)r=h}new Image().src="https://app.duedove.com/v/"+location.hostname.replace(/^www\./,"")+"/"+encodeURIComponent(r)+location.pathname}catch(e){}})();
