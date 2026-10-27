@@ -5,7 +5,8 @@
 <header class="top"><div class="wrap"><a class="logo" href="/"><i aria-hidden="true"></i>SlipKiln</a><nav class="nav"><a class="hide-sm" href="/templates/">Templates</a><a class="hide-sm" href="/pricing.html">Pricing</a><a class="" href="/docs/" aria-current="page">Docs</a><a class="hide-sm" href="/billing.html">Billing</a><a class="btn sm" href="/signup.html">Get API key</a></nav></div></header>
 <main><div class="wrap docs"><aside id="docnav"><div class="grp">Start</div><a href="#quickstart">Quickstart</a><a href="#auth">Authentication</a>
 <div class="grp">Render</div><a href="#html">HTML to PDF</a><a href="#template">Template to PDF</a><a href="#templates">Templates</a><a href="#options">Options</a>
-<div class="grp">Reference</div><a href="#account">Account &amp; billing</a><a href="#errors">Errors</a><a href="#limits">Limits</a><a href="/openapi.yaml">OpenAPI spec</a></aside><div>
+<div class="grp">Reference</div><a href="#account">Account &amp; billing</a><a href="#errors">Errors</a><a href="#limits">Limits</a><a href="/openapi.yaml">OpenAPI spec</a>
+<div class="grp">Integrations</div><a href="/docs/zapier.html">Zapier</a><a href="/guides/html-to-pdf-make.html">Make</a><a href="/guides/html-to-pdf-n8n.html">n8n</a><a href="/guides/">Guides</a></aside><div>
 <h1>API docs</h1><p class="lead">Base URL: <code>https://api.slipkiln.com</code>. All requests and responses are JSON, except render endpoints, which return <code>application/pdf</code>.</p>
 <h2 id="quickstart">Quickstart</h2><ol><li><a href="/signup.html">Get a free API key</a> (50 documents/month).</li><li>Save it in your shell: <code>export SLIPKILN_KEY=sk_…</code></li><li>Send HTML or JSON and get a PDF back.</li></ol>
 <div><div class="tabs"><button class="on" data-lang="curl">curl</button><button data-lang="js">JavaScript</button><button data-lang="py">Python</button></div><pre data-lang="curl">curl -X POST https://api.slipkiln.com/v1/render/template \

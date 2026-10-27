@@ -1,0 +1,47 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://api.slipkiln.com; form-action 'none'; base-uri 'none'; object-src 'none'"><meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Use SlipKiln with Zapier | SlipKiln</title><meta name="description" content="Connect SlipKiln to Zapier with your API key and create branded PDF invoices, receipts and certificates from 9,000+ apps, no code.">
+<meta name="theme-color" content="#ffffff"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e8590c'/%3E%3C/svg%3E"><link rel="stylesheet" href="/style.css"></head><body>
+
+<header class="top"><div class="wrap"><a class="logo" href="/"><i aria-hidden="true"></i>SlipKiln</a><nav class="nav"><a class="hide-sm" href="/templates/">Templates</a><a class="hide-sm" href="/pricing.html">Pricing</a><a class="" href="/docs/">Docs</a><a class="hide-sm" href="/billing.html">Billing</a><a class="btn sm" href="/signup.html">Get API key</a></nav></div></header>
+<main><div class="wrap docs"><aside id="docnav"><div class="grp">Zapier</div><a href="#connect">Connect</a><a href="#actions">Actions</a><a href="#examples">Example Zaps</a><a href="#tips">Tips &amp; limits</a><a href="#help">Help</a><div class="grp">More</div><a href="/docs/">API docs</a><a href="/templates/">Templates</a></aside><div>
+<h1>Use SlipKiln with Zapier</h1><p class="lead">Create branded PDF invoices, receipts and certificates from any app Zapier connects to. No code needed. Every PDF counts toward your plan the same as an API call.</p>
+<h2 id="connect">Connect your account</h2><ol>
+<li><a href="/signup.html">Get a free API key</a> (50 documents a month). Keys start with <code>sk_</code>.</li>
+<li>Open the <a href="https://zapier.com/developer/public-invite/248542/50964e39e5bac6228de249e861a11fd6/" rel="noopener">SlipKiln Zapier invite link</a> and accept it (SlipKiln is in Zapier beta, so it doesn't show in Zapier search yet). Then create a Zap and pick <b>SlipKiln</b> as an action app.</li>
+<li>When Zapier asks you to sign in, paste your API key and click <b>Yes, Continue</b>. Zapier checks the key and shows the connection under your plan name.</li></ol>
+<p class="small">Keep your key private. If it leaks, email <a href="mailto:support@slipkiln.com">support@slipkiln.com</a> and we'll rotate it.</p>
+<h2 id="actions">Actions</h2>
+<h3>Create PDF From Template</h3><p>Makes a branded invoice, receipt or certificate from your data.</p>
+<table><tr><th>Field</th><th>Notes</th></tr>
+<tr><td>Template <b>(required)</b></td><td>Invoice, Receipt or Certificate. See the <a href="/templates/">template gallery</a>.</td></tr>
+<tr><td>Data (JSON) <b>(required)</b></td><td>The template's fields as JSON. Map values from earlier steps into it.</td></tr>
+<tr><td>File Name</td><td>Defaults to <code>document.pdf</code>.</td></tr>
+<tr><td>Paper Size</td><td>Letter, A4, A5 or Legal.</td></tr></table>
+<h3>Create PDF From HTML</h3><p>Turns your own HTML and CSS into a PDF.</p>
+<table><tr><th>Field</th><th>Notes</th></tr>
+<tr><td>HTML <b>(required)</b></td><td>A full HTML page. Images must be <code>data:</code> URIs, because rendering has no network access.</td></tr>
+<tr><td>File Name</td><td>Defaults to <code>document.pdf</code>.</td></tr>
+<tr><td>Paper Size</td><td>Letter, A4, A5 or Legal.</td></tr>
+<tr><td>Landscape</td><td>Yes or No. Default is No.</td></tr></table>
+<p>Both actions return <b>PDF File</b> (a file later steps can attach or upload), <b>File Name</b> and <b>Documents This Month</b>.</p>
+<h2 id="examples">Example Zaps</h2>
+<div class="grid g2">
+<div class="card"><h3>Form → certificate by email</h3><p>Google Forms new response → SlipKiln <i>Create PDF From Template</i> (Certificate) → Gmail send email with the PDF File attached.</p></div>
+<div class="card"><h3>Paid order → receipt in Drive</h3><p>New Shopify or WooCommerce order → SlipKiln <i>Create PDF From Template</i> (Receipt) → Google Drive upload file.</p></div>
+<div class="card"><h3>New row → invoice</h3><p>Google Sheets new row → SlipKiln <i>Create PDF From Template</i> (Invoice) → Gmail or Outlook send email.</p></div>
+<div class="card"><h3>Custom report → Dropbox</h3><p>Schedule by Zapier (weekly) → Formatter builds HTML → SlipKiln <i>Create PDF From HTML</i> → Dropbox upload file.</p></div></div>
+<p>Example invoice data for the <b>Data (JSON)</b> field:</p>
+<pre>{"number":"INV-{{Row}}","issue_date":"{{Date}}","due_date":"{{Due Date}}","currency":"USD",
+ "customer":{"name":"{{Name}}","email":"{{Email}}"},
+ "items":[{"description":"{{Item}}","qty":1,"unit_price":{{Amount}}}]}</pre>
+<p class="small">Field names vary by template. Copy the exact sample from the <a href="/templates/">template gallery</a>.</p>
+<h2 id="tips">Tips &amp; limits</h2><ul>
+<li>Zap runs use your plan's documents. On the free plan, runs after 50 documents in a month fail with <code>quota_exceeded</code> until the next month or an upgrade on the <a href="/billing.html">Billing page</a>.</li>
+<li>Failed renders don't count against your quota.</li>
+<li>Requests up to 2 MB, PDFs up to 20 MB, 15 seconds per render. See <a href="/docs/#limits">limits</a>.</li>
+<li>Documents are processed in memory and not stored after Zapier receives them.</li></ul>
+<h2 id="help">Help</h2><p>Zap erroring? Check the error code in your Zap history against the <a href="/docs/#errors">error table</a>, or email <a href="mailto:support@slipkiln.com">support@slipkiln.com</a>.</p>
+</div></div></main>
+<footer><div class="wrap"><div>© 2026 DJ Solutions LLC · <a href="mailto:support@slipkiln.com">support@slipkiln.com</a></div>
+<nav><a href="/templates/">Templates</a><a href="/compare/">Compare</a><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/refunds.html">Refunds</a></nav></div></footer>
+<script src="/app.js" defer></script><script src="/v.js" defer></script></body></html>
