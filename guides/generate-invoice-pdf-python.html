@@ -1,0 +1,80 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://api.slipkiln.com; form-action 'none'; base-uri 'none'; object-src 'none'"><meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Generate PDF Invoices From JSON in Python | SlipKiln</title><meta name="description" content="Create invoice PDFs in Python with requests: line items, tax, logo and totals from a dict. Copy-paste code, retries, Django example. 50 free PDFs a month."><link rel="canonical" href="https://slipkiln.com/guides/generate-invoice-pdf-python.html"><meta property="og:title" content="Generate PDF Invoices From JSON in Python | SlipKiln"><meta property="og:description" content="Create invoice PDFs in Python with requests: line items, tax, logo and totals from a dict. Copy-paste code, retries, Django example. 50 free PDFs a month.">
+<meta property="og:url" content="https://slipkiln.com/guides/generate-invoice-pdf-python.html"><meta property="og:type" content="website"><meta property="og:site_name" content="SlipKiln"><meta property="og:image" content="https://slipkiln.com/assets/invoice.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@slipkiln">
+<meta name="theme-color" content="#ffffff"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e8590c'/%3E%3C/svg%3E"><link rel="stylesheet" href="/style.css"></head><body>
+<header class="top"><div class="wrap"><a class="logo" href="/"><i aria-hidden="true"></i>SlipKiln</a><nav class="nav"><a class="hide-sm" href="/templates/">Templates</a><a class="hide-sm" href="/guides/">Guides</a><a class="hide-sm" href="/pricing.html">Pricing</a><a class="" href="/docs/">Docs</a><a class="btn sm" href="/signup.html">Get API key</a></nav></div></header>
+<main><section class="hero center" style="padding-bottom:32px"><div class="wrap"><p class="small"><a href="/guides/">Guides</a> / Invoice PDF in Python</p><h1>Generate PDF invoices in Python</h1><p class="lead">Turn a Python dict into an itemized invoice PDF with one HTTP request. No ReportLab layout code, no headless Chrome on your server.</p><div class="actions"><a class="btn lg" href="/signup.html">Get a free API key</a></div></div></section><section class="tight" style="padding-top:0"><div class="wrap narrow prose"><h2>What you need</h2><ul><li>Python 3.8+ and <code>pip install requests</code></li><li>A free SlipKiln API key (50 documents a month, no card). Put it in <code>SLIPKILN_KEY</code>.</li></ul><h2>1. Send the invoice data</h2><p>The built-in <a href="/templates/invoice.html">invoice template</a> takes your line items and computes subtotal, tax and total for you. The response body is the PDF.</p><pre><code>import os
+import requests
+
+API = &quot;https://api.slipkiln.com/v1/render/template&quot;
+KEY = os.environ[&quot;SLIPKILN_KEY&quot;]  # keep keys server-side
+
+invoice = {
+    &quot;number&quot;: &quot;INV-1042&quot;,
+    &quot;issue_date&quot;: &quot;2026-11-20&quot;,
+    &quot;due_date&quot;: &quot;2026-12-20&quot;,
+    &quot;currency&quot;: &quot;USD&quot;,
+    &quot;customer&quot;: {&quot;name&quot;: &quot;Acme Co.&quot;, &quot;email&quot;: &quot;ap@acme.example&quot;,
+                 &quot;address&quot;: [&quot;100 Main St&quot;, &quot;Denver, CO 80202&quot;]},
+    &quot;items&quot;: [
+        {&quot;description&quot;: &quot;Consulting&quot;, &quot;qty&quot;: 10, &quot;unit_price&quot;: 120},
+        {&quot;description&quot;: &quot;Hosting (November)&quot;, &quot;qty&quot;: 1, &quot;unit_price&quot;: 49},
+    ],
+    &quot;tax_rate&quot;: 8.25,
+    &quot;notes&quot;: &quot;Thank you for your business. Net 30.&quot;,
+}
+
+r = requests.post(
+    API,
+    headers={&quot;Authorization&quot;: f&quot;Bearer {KEY}&quot;},
+    json={&quot;template&quot;: &quot;invoice&quot;, &quot;data&quot;: invoice},
+    timeout=30,
+)
+if r.status_code != 200:
+    raise RuntimeError(r.json().get(&quot;message&quot;, r.text))
+with open(&quot;INV-1042.pdf&quot;, &quot;wb&quot;) as f:
+    f.write(r.content)
+print(&quot;documents this month:&quot;, r.headers.get(&quot;x-usage-month&quot;))</code></pre><p>Fields: <code>number</code>, <code>issue_date</code> and <code>due_date</code> are printed as given. <code>currency</code> is an ISO 4217 code (default USD). <code>items</code> takes up to 500 rows of <code>{description, qty, unit_price}</code>. <code>tax_rate</code> is a percent. Full reference in the <a href="/docs/">docs</a>.</p><h2>2. Add your logo and colors</h2><p>Every template accepts a <code>brand</code> object. Logos must be inlined as base64 <code>data:</code> URIs, because the renderer has no network access.</p><pre><code>import base64
+
+with open(&quot;logo.png&quot;, &quot;rb&quot;) as f:
+    logo = &quot;data:image/png;base64,&quot; + base64.b64encode(f.read()).decode()
+
+invoice[&quot;brand&quot;] = {
+    &quot;name&quot;: &quot;Northwind Studio&quot;,
+    &quot;logo&quot;: logo,             # data: URI only; remote URLs are blocked
+    &quot;color&quot;: &quot;#0f766e&quot;,       # accent color
+    &quot;email&quot;: &quot;billing@northwind.example&quot;,
+    &quot;website&quot;: &quot;northwind.example&quot;,
+    &quot;address&quot;: [&quot;12 Market St&quot;, &quot;Boulder, CO 80302&quot;],
+}</code></pre><h2>3. Handle limits and retries</h2><p>The API allows 60 requests a minute per key. On <code>429</code> or <code>503</code>, wait and retry. Other errors return JSON like <code>{"error":"invalid_request","message":"…"}</code> and should not be retried. Failed renders don't count toward your quota.</p><pre><code>import time
+
+def render(payload, attempts=4):
+    for i in range(attempts):
+        r = requests.post(API, headers={&quot;Authorization&quot;: f&quot;Bearer {KEY}&quot;},
+                          json=payload, timeout=30)
+        if r.status_code == 200:
+            return r.content
+        if r.status_code in (429, 503):           # rate limited / busy
+            wait = float(r.headers.get(&quot;retry-after&quot;, 2 ** i))
+            time.sleep(wait)
+            continue
+        raise RuntimeError(f&quot;{r.status_code}: {r.json().get(&#x27;message&#x27;)}&quot;)
+    raise RuntimeError(&quot;gave up after retries&quot;)</code></pre><h2>4. Serve it from a web app</h2><pre><code># views.py (Django). Flask/FastAPI look the same: return the bytes with a PDF content type.
+from django.http import HttpResponse
+
+def invoice_pdf(request, number):
+    data = build_invoice_dict(number)   # your own lookup
+    pdf = render({&quot;template&quot;: &quot;invoice&quot;, &quot;data&quot;: data})
+    resp = HttpResponse(pdf, content_type=&quot;application/pdf&quot;)
+    resp[&quot;Content-Disposition&quot;] = f&#x27;attachment; filename=&quot;{number}.pdf&quot;&#x27;
+    return resp</code></pre><h2>Need your own layout?</h2><p>Render any HTML instead. Build it with Jinja2 (or any template engine) and post it to <code>/v1/render/html</code>. Inline your CSS, fonts and images as <code>data:</code> URIs.</p><pre><code>from jinja2 import Template
+
+html = Template(open(&quot;invoice.html&quot;).read()).render(invoice=invoice)
+r = requests.post(&quot;https://api.slipkiln.com/v1/render/html&quot;,
+                  headers={&quot;Authorization&quot;: f&quot;Bearer {KEY}&quot;},
+                  json={&quot;html&quot;: html, &quot;options&quot;: {&quot;format&quot;: &quot;Letter&quot;,
+                        &quot;margin&quot;: {&quot;top&quot;: &quot;15mm&quot;, &quot;bottom&quot;: &quot;15mm&quot;}}},
+                  timeout=30)</code></pre><h2>Why not ReportLab, WeasyPrint or pdfkit?</h2><p>They work, and for some teams they're the right call. ReportLab means positioning text in code. WeasyPrint and wkhtmltopdf (behind pdfkit) each support a different subset of modern CSS, and wkhtmltopdf is no longer maintained. Running Chromium yourself gives the best CSS support but adds memory, fonts and sandboxing to your ops list (see <a href="/guides/puppeteer-pdf-production.html">what breaks with self-hosted Chrome</a>). An API trades a per-document cost for none of that: free up to 50 a month, then $9 for 1,000.</p><h2>Related</h2><ul><li><a href="/guides/generate-invoice-pdf-nodejs.html">Generate invoice PDFs in Node.js</a></li><li><a href="/guides/css-page-breaks-pdf.html">CSS page breaks for PDFs</a></li><li><a href="/guides/invoice-pdf-api.html">Invoice PDF API</a></li><li><a href="/pricing.html">Pricing</a></li></ul><p class="small">Updated November 2026.</p></div></section></main>
+<footer><div class="wrap"><div>© 2026 DJ Solutions LLC · <a href="mailto:support@slipkiln.com">support@slipkiln.com</a></div>
+<nav><a href="/templates/">Templates</a><a href="/compare/">Compare</a><a href="/guides/">Guides</a><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/refunds.html">Refunds</a></nav></div></footer>
+<script src="/app.js" defer></script><script src="/v.js" defer></script></body></html>

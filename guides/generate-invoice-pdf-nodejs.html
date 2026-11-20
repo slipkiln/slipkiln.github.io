@@ -1,0 +1,73 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://api.slipkiln.com; form-action 'none'; base-uri 'none'; object-src 'none'"><meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Generate PDF Invoices in Node.js (No Puppeteer) | SlipKiln</title><meta name="description" content="Create invoice and receipt PDFs in Node.js with fetch: JSON in, PDF out. Express route and Stripe webhook examples. 50 free PDFs a month."><link rel="canonical" href="https://slipkiln.com/guides/generate-invoice-pdf-nodejs.html"><meta property="og:title" content="Generate PDF Invoices in Node.js (No Puppeteer) | SlipKiln"><meta property="og:description" content="Create invoice and receipt PDFs in Node.js with fetch: JSON in, PDF out. Express route and Stripe webhook examples. 50 free PDFs a month.">
+<meta property="og:url" content="https://slipkiln.com/guides/generate-invoice-pdf-nodejs.html"><meta property="og:type" content="website"><meta property="og:site_name" content="SlipKiln"><meta property="og:image" content="https://slipkiln.com/assets/invoice.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@slipkiln">
+<meta name="theme-color" content="#ffffff"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e8590c'/%3E%3C/svg%3E"><link rel="stylesheet" href="/style.css"></head><body>
+<header class="top"><div class="wrap"><a class="logo" href="/"><i aria-hidden="true"></i>SlipKiln</a><nav class="nav"><a class="hide-sm" href="/templates/">Templates</a><a class="hide-sm" href="/guides/">Guides</a><a class="hide-sm" href="/pricing.html">Pricing</a><a class="" href="/docs/">Docs</a><a class="btn sm" href="/signup.html">Get API key</a></nav></div></header>
+<main><section class="hero center" style="padding-bottom:32px"><div class="wrap"><p class="small"><a href="/guides/">Guides</a> / Invoice PDF in Node.js</p><h1>Generate PDF invoices in Node.js</h1><p class="lead">JSON in, PDF out, with the fetch built into Node 18+. No Chromium download, no PDFKit coordinates.</p><div class="actions"><a class="btn lg" href="/signup.html">Get a free API key</a></div></div></section><section class="tight" style="padding-top:0"><div class="wrap narrow prose"><h2>What you need</h2><ul><li>Node.js 18 or newer (for built-in <code>fetch</code>)</li><li>A free SlipKiln API key in <code>SLIPKILN_KEY</code>. Keep it on the server, never in browser code.</li></ul><h2>1. Render an invoice</h2><pre><code>// Node 18+ (built-in fetch). Save as invoice.mjs and run: node invoice.mjs
+import { writeFile } from &quot;node:fs/promises&quot;;
+
+const invoice = {
+  number: &quot;INV-1042&quot;,
+  issue_date: &quot;2026-11-20&quot;,
+  due_date: &quot;2026-12-20&quot;,
+  currency: &quot;USD&quot;,
+  customer: { name: &quot;Acme Co.&quot;, email: &quot;ap@acme.example&quot;, address: [&quot;100 Main St&quot;, &quot;Denver, CO 80202&quot;] },
+  items: [
+    { description: &quot;Consulting&quot;, qty: 10, unit_price: 120 },
+    { description: &quot;Hosting (November)&quot;, qty: 1, unit_price: 49 },
+  ],
+  tax_rate: 8.25,
+  notes: &quot;Thank you for your business. Net 30.&quot;,
+};
+
+const res = await fetch(&quot;https://api.slipkiln.com/v1/render/template&quot;, {
+  method: &quot;POST&quot;,
+  headers: {
+    Authorization: `Bearer ${process.env.SLIPKILN_KEY}`,
+    &quot;Content-Type&quot;: &quot;application/json&quot;,
+  },
+  body: JSON.stringify({ template: &quot;invoice&quot;, data: invoice }),
+});
+if (!res.ok) throw new Error((await res.json()).message);
+await writeFile(&quot;INV-1042.pdf&quot;, Buffer.from(await res.arrayBuffer()));
+console.log(&quot;documents this month:&quot;, res.headers.get(&quot;x-usage-month&quot;));</code></pre><p>The <a href="/templates/invoice.html">invoice template</a> computes subtotal, tax and total from <code>items</code> and <code>tax_rate</code>. Add a <code>brand</code> object with <code>name</code>, <code>color</code> and a base64 <code>logo</code> data URI to match your look.</p><h2>2. Serve it from Express</h2><pre><code>// Express route that streams the PDF to the browser
+app.get(&quot;/invoices/:number.pdf&quot;, async (req, res, next) =&gt; {
+  try {
+    const data = await loadInvoice(req.params.number); // your own lookup
+    const r = await fetch(&quot;https://api.slipkiln.com/v1/render/template&quot;, {
+      method: &quot;POST&quot;,
+      headers: { Authorization: `Bearer ${process.env.SLIPKILN_KEY}`, &quot;Content-Type&quot;: &quot;application/json&quot; },
+      body: JSON.stringify({ template: &quot;invoice&quot;, data }),
+    });
+    if (!r.ok) return res.status(502).json(await r.json());
+    res.type(&quot;application/pdf&quot;);
+    res.set(&quot;Content-Disposition&quot;, `attachment; filename=&quot;${req.params.number}.pdf&quot;`);
+    res.send(Buffer.from(await r.arrayBuffer()));
+  } catch (e) { next(e); }
+});</code></pre><h2>3. Receipts from Stripe webhooks</h2><p>A common setup: when Stripe reports <code>invoice.paid</code>, render a branded receipt and email or store it.</p><pre><code>// After a Stripe invoice is paid, render a receipt PDF from the webhook payload
+// (verify the webhook signature first, as Stripe&#x27;s docs describe)
+const inv = event.data.object; // invoice.paid
+const receipt = {
+  number: inv.number,
+  date: new Date(inv.status_transitions.paid_at * 1000).toISOString().slice(0, 10),
+  currency: inv.currency.toUpperCase(),
+  customer: { name: inv.customer_name },
+  items: inv.lines.data.map((l) =&gt; ({
+    description: l.description,
+    qty: l.quantity ?? 1,
+    unit_price: l.amount / 100 / (l.quantity ?? 1),
+  })),
+};
+// POST { template: &quot;receipt&quot;, data: receipt } exactly like the invoice example</code></pre><h2>Your own HTML</h2><p>For reports, packing slips or anything custom, post HTML to <code>/v1/render/html</code>. Inline CSS, fonts and images as <code>data:</code> URIs; external URLs are blocked by design.</p><pre><code>const html = `&lt;!doctype html&gt;&lt;style&gt;
+  @page { margin: 0 }  body { font: 14px system-ui; margin: 20mm }
+  tr { break-inside: avoid }
+&lt;/style&gt;&lt;h1&gt;Report&lt;/h1&gt;${rowsToTable(rows)}`;
+
+await fetch(&quot;https://api.slipkiln.com/v1/render/html&quot;, {
+  method: &quot;POST&quot;,
+  headers: { Authorization: `Bearer ${process.env.SLIPKILN_KEY}`, &quot;Content-Type&quot;: &quot;application/json&quot; },
+  body: JSON.stringify({ html, options: { format: &quot;Letter&quot; } }),
+});</code></pre><h2>Errors and limits</h2><ul><li><code>401</code>: missing or wrong key. <code>402</code>: the free plan's 50 documents are used up this month.</li><li><code>429</code> / <code>503</code>: back off and retry (honor <code>retry-after</code>).</li><li>Request up to 2 MB, PDF up to 20 MB, 15 seconds per render.</li></ul><h2>Puppeteer vs PDFKit vs an API</h2><p>PDFKit and pdfmake are fast and dependency-light, but you lay out every line in code. Puppeteer and Playwright give you full CSS, but each render runs a Chromium you have to size, patch and sandbox (<a href="/guides/puppeteer-pdf-production.html">details</a>). An API keeps HTML/CSS layouts without running a browser yourself.</p><h2>Related</h2><ul><li><a href="/guides/generate-invoice-pdf-python.html">Generate invoice PDFs in Python</a></li><li><a href="/guides/puppeteer-pdf-production.html">Puppeteer PDFs in production</a></li><li><a href="/templates/receipt.html">Receipt template</a></li><li><a href="/docs/">API docs</a></li></ul><p class="small">Updated November 2026.</p></div></section></main>
+<footer><div class="wrap"><div>© 2026 DJ Solutions LLC · <a href="mailto:support@slipkiln.com">support@slipkiln.com</a></div>
+<nav><a href="/templates/">Templates</a><a href="/compare/">Compare</a><a href="/guides/">Guides</a><a href="/pricing.html">Pricing</a><a href="/docs/">Docs</a><a href="/billing.html">Billing</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a><a href="/refunds.html">Refunds</a></nav></div></footer>
+<script src="/app.js" defer></script><script src="/v.js" defer></script></body></html>
