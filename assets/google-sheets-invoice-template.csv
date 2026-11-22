@@ -1,0 +1,5 @@
+Invoice #,Date,Due date,Client,Client email,Client address,Description,Qty,Unit price,Tax %,Notes
+INV-1001,2026-11-01,2026-12-01,Acme Co.,ap@acme.example,"42 Industrial Way; Boulder, CO 80301",Website redesign,1,2400,0,Net 30. Thank you!
+INV-1001,,,,,,Consulting (hours),10,120,,
+INV-1002,2026-11-03,2026-12-03,Globex LLC,billing@globex.example,"9 Main St; Austin, TX 78701",Logo design,1,650,8.25,
+INV-1003,2026-11-05,2026-12-05,Initech,,,Monthly retainer,1,1500,0,
